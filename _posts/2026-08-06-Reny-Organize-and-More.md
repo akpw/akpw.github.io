@@ -6,7 +6,7 @@ categories: articles
 tags: [Reny, CLI Tools, Python, File Management]
 ---
 
-Do you remember our [previous look into organizing files](https://akpw.github.io/articles/2025/09/22/Print-and-Organize.html)? At the time, it was with the `renamer` component embedded deep within the `batchmp` multimedia suite. It was useful for organizing messy download folders, generating virtual views, and wrangling chronological chaos.
+Remember our [previous look into organizing files](https://akpw.github.io/articles/2025/09/22/Print-and-Organize.html)? At the time, it was with the `renamer` component embedded deep within the `batchmp` multimedia suite. It was useful for organizing messy download folders, generating virtual views, and wrangling chronological chaos.
 
 But times change, and tools evolve. 
 
