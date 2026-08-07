@@ -284,6 +284,8 @@ $ reny -el 2 -ig .renyignore -go
 2 files, 5 folders
 ```
 
+Similarly, `-gt` or `--git-tracked` filters the view to show only files already tracked by Git, completely ignoring untracked clutter.
+
 ### Configuration & Exclusions
 Rather than retyping the same flags, generate a local config file in the current directory:
 
