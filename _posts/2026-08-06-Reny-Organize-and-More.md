@@ -238,7 +238,33 @@ This prefixes each file with a sequential index, which comes in handy for photo 
 Sometimes the best way to organize is just to throw things out. `reny delete` safely removes targeted files. When combined with filters, it's perfect for safely cleaning up a messy downloads folder (`reny -in "*.tmp" delete`), or sweeping away build artifacts to prepare for a clean build. Pair it with the `-gi` flag to instantly target and delete all Git-ignored files (`__pycache__`, `dist/`, `.egg-info`):
 
 ```bash
-$ reny -gi delete -dc
+$ reny -gi -ex .venv delete -id
+```
+
+```text
+The following files / folders will be deleted
+/reny
+  |-  6KB .DS_Store
+  |->/ 3.4MB .mypy_cache
+    |-  0KB .gitignore
+    |-  0KB CACHEDIR.TAG
+    |-/ 3.4MB 3.14
+  |->/ 5KB .pytest_cache
+    |-  0KB .gitignore
+    |-  0KB CACHEDIR.TAG
+    |-  0KB README.md
+  |->/ 103KB dist
+    |-  56KB reny-1.0.12-py3-none-any.whl
+    |-  47KB reny-1.0.12.tar.gz
+  |->/ 13KB reny.egg-info
+    |-  0KB dependency_links.txt
+    |-  0KB entry_points.txt
+    |-  11KB PKG-INFO
+    |-  0KB requires.txt
+    |-  1KB SOURCES.txt
+    |-  0KB top_level.txt
+14 files, 5 folders
+Total selected entries size: 3.5MB
 ```
 Like everything else, it previews the deletion tree and waits for a firm confirmation before dropping anything into the void.
 
