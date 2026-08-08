@@ -158,7 +158,7 @@ Any `.gitignore`-style file works here. `reny` also picks up `./.renyignore` fro
 
 ## Virtual Views
 
-Organizing usually starts with a question: what would this folder look like if it were tidy? A virtual view answers it by rendering the reorganized structure — here by type, sorted by size descending (`-s sd`), with sizes shown (`-ss`) — *without changing anything on disk*:
+Organizing usually starts with a question: what would this folder look like if it were tidy? A virtual view answers it by rendering the reorganized structure — here by type, sorted by size descending (`-s sd`, though sorting by date using `da` or `dd` is also supported), with sizes shown (`-ss`) — *without changing anything on disk*:
 
 ```bash
 $ reny -b type -s sd -ss
@@ -234,6 +234,14 @@ $ reny index -dc
 ```
 This prefixes each file with a sequential index, which comes in handy for photo albums and structured datasets. Indexing is multi-level by default, restarting the count inside each directory; `-sq` numbers files sequentially across the whole tree instead.
 
+### Bulk Deletion
+Sometimes the best way to organize is just to throw things out. `reny delete` safely removes targeted files. When combined with filters, it's perfect for safely cleaning up a messy downloads folder (`reny -in "*.tmp" delete`), or sweeping away build artifacts to prepare for a clean build. Pair it with the `-gi` flag to instantly target and delete all Git-ignored files (`__pycache__`, `dist/`, `.egg-info`):
+
+```bash
+$ reny -gi delete -dc
+```
+Like everything else, it previews the deletion tree and waits for a firm confirmation before dropping anything into the void.
+
 ## Developers' Quality-of-Life Features
 
 As a standalone CLI tool, `reny` slots neatly into everyday developer workflows.
@@ -284,7 +292,7 @@ $ reny -el 2 -ig .renyignore -go
 2 files, 5 folders
 ```
 
-Similarly, `-gt` or `--git-tracked` filters the view to show only files already tracked by Git, completely ignoring untracked clutter.
+Similarly, `-gt` or `--git-tracked` filters the view to show only files already tracked by Git, completely ignoring untracked clutter. If you want the exact opposite, `--not-git-tracked` (`-ngt`) surfaces only the untracked files. Lastly, `--git-ignored` (`-gi`) gives you a crystal-clear view of everything Git explicitly ignores—like build artifacts and `.DS_Store`s—temporarily bypassing `.renyignore` so nothing slips by.
 
 ### Configuration & Exclusions
 Rather than retyping the same flags, generate a local config file in the current directory:
