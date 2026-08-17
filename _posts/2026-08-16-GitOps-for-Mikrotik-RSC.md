@@ -14,11 +14,11 @@ Over the last few months, while revising my homelab network and router setups ac
 
 > *What would it take to manage RouterOS configurations cleanly, right alongside all my other dotfiles and infrastructure repos that sit neatly under Git?*
 
-The task looked challenging at first glance, but then thinking some more through the mechanics -- it didn't need to be overly complex. At its core, a RouterOS export is a structured language so instead of diving into hairy regex adventures how about parsing it into an **Abstract Syntax Tree (AST)** and then just pass it through a **Chain of Responsibility** pipeline to normalize formatting, sort unordered sections deterministically, extract scripts into clean sidecars, split the monolithic output into modular component files, and maybe a bit more things like that along the way.
+The task looked challenging at first glance, but then thinking some more through the mechanics -- it didn't need to be overly complex. At its core, a RouterOS export is a structured language so instead of diving into hairy regex adventures how about parsing it into an **Abstract Syntax Tree (AST)** and then just passing it through a **Chain of Responsibility** pipeline to normalize formatting, sort unordered sections deterministically, extract scripts into clean sidecars, split the monolithic output into modular component files, and maybe a bit more things like that along the way.
 
 Still does not sound trivial? Well, but let's weigh the odds here -- keep doing tedious manual reviews and diff wrestling across a fleet of routers, or solve the problem once and for all?
 
-So and here we are, after a few trials and design iterations... behold: `mktxp` extends its reach beyond Prometheus metrics exporter duties and steps onto the new ground of **RouterOS GitOps configuration management**!
+So and here we are, after some trials and design iterations... behold: [`mktxp`](https://github.com/akpw/mktxp) extends its reach beyond Prometheus metrics exporter duties and steps onto the new ground of **RouterOS GitOps configuration management**!
 
 ---
 
@@ -66,6 +66,22 @@ Rather than relying on brittle regex search-and-replace, the new `mktxp rsc` eng
    Fetch configs directly from your live routers with native SSH key authentication (`~/.ssh/id_ed25519`, `ssh-agent`, or `--ssh-key`). The raw export streams directly into RAM, processes in-flight, and emits clean files with zero temporary file residue on disk.
 5. **Zero Extra Dependencies**:  
    Implemented entirely with Python standard library capabilities, keeping Homebrew, pip/pipx, and container installations fast and lightweight.
+
+---
+
+### Extensible by Design: Add Custom Handlers with Zero Code
+
+The handler pipeline is completely dynamic. If you want to carve out dedicated files for subsystems like BGP routing, VLAN switches, or custom tunnels, you don't need to write any Python. Just add your handler name to `handler_order` and define its matching slash paths:
+
+```ini
+[RSC]
+    handler_order = base, wifi, system, ip, dhcp-leases, firewall, lte, wireguard, bgp
+
+    # Claims all BGP / dynamic routing paths into a dedicated 09-bgp.rsc file
+    handler_bgp = /routing bgp, /routing bfd, /routing filter, /routing ospf
+```
+
+The engine uses **longest-prefix specificity matching** (ensuring `/routing bgp` is claimed by `handler_bgp` rather than general `/routing`), automatically numbers the new file (`09-bgp.rsc`), and gracefully routes any unmapped paths into `99-other.rsc`.
 
 ---
 
@@ -156,7 +172,7 @@ This makes batch backup scripts and automated CI/CD jobs clean and collision-fre
 
 ## Command Line Options Reference
 
-Both commands share an intuitive, self-explanatory set of CLI options:
+Both commands share a somewhat self-explanatory set of CLI options:
 
 ### `mktxp rsc format -h`
 ```text
@@ -242,6 +258,45 @@ The split hierarchy and defaults can be tuned in your `_mktxp.conf` under the `[
     handler_lte = /interface lte, /tool sms
     handler_wireguard = /interface wireguard
 ```
+
+### Extensible by Design: Add Custom Handlers with Zero Code
+
+The handler pipeline is completely dynamic. If you want to carve out dedicated files for subsystems like BGP routing, VLAN switches, or custom tunnels, you don't need to write any Python. Just add your handler name to `handler_order` and define its matching slash paths:
+
+```ini
+[RSC]
+    handler_order = base, wifi, system, ip, dhcp-leases, firewall, lte, wireguard, bgp
+
+    # Claims all BGP / dynamic routing paths into a dedicated 09-bgp.rsc file
+    handler_bgp = /routing bgp, /routing bfd, /routing filter, /routing ospf
+```
+
+The engine uses **longest-prefix specificity matching** (ensuring `/routing bgp` is claimed by `handler_bgp` rather than general `/routing`), automatically numbers the new file (`09-bgp.rsc`), and gracefully routes any unmapped paths into `99-other.rsc`.
+
+---
+
+## Installation & Getting Started
+
+`mktxp` can be installed or run via your tool of choice:
+
+- **With [Homebrew](https://brew.sh)** (macOS / Linux):
+  ```bash
+  $ brew install mktxp
+  ```
+- **With `pipx`** (Isolated CLI environment):
+  ```bash
+  $ pipx install mktxp
+  ```
+- **With `pip` / PyPI**:
+  ```bash
+  $ pip install --upgrade mktxp
+  ```
+- **With Docker**:
+  ```bash
+  $ docker pull ghcr.io/akpw/mktxp:latest
+  ```
+
+For full documentation, configuration templates, and metrics exporter guides, check out the [MKTXP GitHub Repository](https://github.com/akpw/mktxp).
 
 ---
 
