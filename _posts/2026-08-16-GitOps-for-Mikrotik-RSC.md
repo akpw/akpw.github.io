@@ -149,7 +149,7 @@ Each component is dedicated to its subsystem:
 - **`06-firewall.rsc`**: Connection tracking, sorted address lists, RAW/Mangle/Filter/NAT chains.
 - **`07-lte.rsc`**: LTE interfaces, APNs, SMS settings.
 - **`08-wireguard.rsc`**: WireGuard interfaces and peer definitions.
-- **`*.rsc` (Sidecars)**: Discrete, syntax-highlighted RouterOS scripts.
+- **`<Script-Name>.rsc`**: Multi-line RouterOS scripts extracted into standalone files (e.g. `Cloud-Backup.rsc`, `Failover-Check.rsc`), making them clean, readable, and syntax-highlighted.
 - **`99-other.rsc`**: Fallback catch-all for custom peripheral or vendor-specific settings.
 
 ---
