@@ -26,18 +26,18 @@ Now, with the latest direction towards interactive **CLI network diagnostics** (
 More on that later, but for now let's see what the architecture looks like and what needed to be updated to get there:
 
 ```text
-               ┌─────────────────────────────────────────────────────────┐
-               │                        MKTXP 2.0                        │
-               │   MikroTik RouterOS Diagnostics, GitOps, and Exporter   │
-               └────────────────────────────┬────────────────────────────┘
-                                            │
-        ┌───────────────────────────────────┼───────────────────────────────────┐
-        ▼                                   ▼                                   ▼
-┌───────────────────────┐       ┌───────────────────────┐       ┌───────────────────────┐
-│     mktxp export      │       │       mktxp rsc       │       │      mktxp diag       │
-│  Prometheus Exporter  │       │  GitOps Configuration │       │ Interactive Live CLI  │
-│  & HTTP Multi-Target  │       │   AST Formatter/Split │       │  Network Diagnostics  │
-└───────────────────────┘       └───────────────────────┘       └───────────────────────┘
+        ┌──────────────────────────────────────┐
+        │              MKTXP 2.0               │
+        │    Diagnostics • GitOps • Exporter   │
+        └──────────────────┬───────────────────┘
+                           │
+       ┌───────────────────┼───────────────────┐
+       ▼                   ▼                   ▼
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│mktxp export │     │  mktxp rsc  │     │ mktxp diag  │
+│ Prometheus  │     │ GitOps RSC  │     │ Interactive │
+│  Exporter   │     │  Formatter  │     │ Diagnostics │
+└─────────────┘     └─────────────┘     └─────────────┘
 ```
 
 
@@ -150,18 +150,15 @@ To keep the codebase clean and avoid technical debt, all legacy shims (`config.p
 A smooth migration would never be possible without proper test coverage. With lots of additional tests added for individual areas, here finally comes the satisfying part:
 ```text
 Unit & Integration Tests:
-============================= 328 passed in 0.49s ==============================
+=================== 328 passed in 0.49s ===================
 ```
 
 ---
 
 ## What's Next
 
-With the modular foundation in place, MKTXP 2.0 is ready for its next steps:
-- **Enhanced DHCP Leases Diagnostics**: Filtering unidentified devices, static vs. dynamic leases, and active bindings directly from the CLI.
-- **Deeper Wireless Diagnostics**: Expanded client and AP analysis.
-
-Stay tuned for the diagnostic deep dive in the next post!
+With the modular foundation in place, MKTXP 2.0 should now be ready for  next steps.
+Stay tuned for more in the next post!
 
 ---
 
