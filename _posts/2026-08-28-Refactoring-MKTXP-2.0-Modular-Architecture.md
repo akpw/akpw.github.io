@@ -26,18 +26,18 @@ Now, with the latest direction towards interactive **CLI network diagnostics** (
 More on that later, but for now let's see what the architecture looks like and what needed to be updated to get there:
 
 ```text
-        ┌──────────────────────────────────────┐
-        │              MKTXP 2.0               │
-        │    Diagnostics • GitOps • Exporter   │
-        └──────────────────┬───────────────────┘
-                           │
-       ┌───────────────────┼───────────────────┐
-       ▼                   ▼                   ▼
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│mktxp export │     │  mktxp rsc  │     │ mktxp diag  │
-│ Prometheus  │     │ GitOps RSC  │     │ Interactive │
-│  Exporter   │     │  Formatter  │     │ Diagnostics │
-└─────────────┘     └─────────────┘     └─────────────┘
+                ┌─────────────────────────────────────────┐
+                │                MKTXP 2.0                │
+                │  MikroTik Diagnostics, GitOps & Export  │
+                └────────────────────┬────────────────────┘
+                                     │
+           ┌─────────────────────────┼─────────────────────────┐
+           ▼                         ▼                         ▼
+┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐
+│     mktxp export     │  │      mktxp rsc       │  │      mktxp diag      │
+│ Prometheus Exporter  │  │ GitOps Configuration │  │ Interactive Live CLI │
+│ & HTTP Multi-Target  │  │ AST Formatter/Split  │  │ Network Diagnostics  │
+└──────────────────────┘  └──────────────────────┘  └──────────────────────┘
 ```
 
 
